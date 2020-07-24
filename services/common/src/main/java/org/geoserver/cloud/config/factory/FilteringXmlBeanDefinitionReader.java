@@ -63,7 +63,7 @@ public class FilteringXmlBeanDefinitionReader extends XmlBeanDefinitionReader {
                             jarNameExpression);
                     try {
                         int c = super.loadBeanDefinitions(resourceURI, actualResources);
-                        log.info("Loaded {} bean definitions from {}", c, uri);
+                        log.info("Loaded {} bean definitions from {}", c, resourceURI);
                         if (actualResources != null) {
                             actualResources.add(root);
                         }
