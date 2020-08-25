@@ -39,6 +39,7 @@
   </dependencies>
   <modules>
     <module>common</module>
+    <module>catalog-service</module>
     <module>catalog</module>
     <module>wfs</module>
     <module>wms</module>
