@@ -15,11 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@FeignClient(
-        name = "catalog-service",
-        contextId = "storeClient",
-        path = "/api/v1/catalog/stores"
-    )
+@FeignClient(name = "catalog-service", contextId = "storeClient", path = "/api/v1/catalog/stores")
 public interface StoreClient extends CatalogApiClient<StoreInfo> {
 
     @PostMapping(path = "/default", produces = XML)

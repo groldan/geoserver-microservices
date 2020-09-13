@@ -5,12 +5,12 @@
 package org.geoserver.cloud.catalog.client.repository;
 
 import java.util.List;
+import lombok.Getter;
+import lombok.NonNull;
 import org.geoserver.catalog.LayerGroupInfo;
 import org.geoserver.catalog.WorkspaceInfo;
 import org.geoserver.catalog.plugin.CatalogInfoRepository.LayerGroupRepository;
 import org.geoserver.cloud.catalog.client.feign.LayerGroupClient;
-import lombok.Getter;
-import lombok.NonNull;
 
 public class CloudLayerGroupRepository
         extends CatalogServiceClientRepository<LayerGroupInfo, LayerGroupClient>

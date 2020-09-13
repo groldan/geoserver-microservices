@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @FeignClient(
     name = "catalog-service",
-    url = "${geoserver.backend.catalog-service.uri:catalog-service}", 
+    url = "${geoserver.backend.catalog-service.uri:catalog-service}",
     contextId = "workspaceClient",
     path = "/api/v1/catalog/workspaces"
 )

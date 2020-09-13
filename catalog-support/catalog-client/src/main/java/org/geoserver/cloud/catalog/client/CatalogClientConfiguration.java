@@ -19,7 +19,6 @@ import org.springframework.context.annotation.Import;
 @Import({CatalogApiClientConfiguration.class, CatalogRepositoriesConfiguration.class})
 public class CatalogClientConfiguration {
 
-
     private @Autowired WorkspaceRepository cloudWorkspaceRepository;
     private @Autowired NamespaceRepository cloudNamespaceRepository;
     private @Autowired StoreRepository cloudStoreRepository;

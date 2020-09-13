@@ -8,6 +8,7 @@ import lombok.Getter;
 import org.geoserver.catalog.MapInfo;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import com.google.common.base.Function;
 
 @RestController
 @RequestMapping(MapController.BASE_URI)
@@ -16,4 +17,10 @@ public class MapController extends AbstractCatalogInfoController<MapInfo> {
     public static final String BASE_URI = BASE_API_URI + "/maps";
 
     private final @Getter Class<MapInfo> infoType = MapInfo.class;
+
+    @Override
+    protected Function<MapInfo, Object> getMapperFunction() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

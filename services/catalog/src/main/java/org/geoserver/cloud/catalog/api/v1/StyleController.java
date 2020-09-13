@@ -8,6 +8,7 @@ import lombok.Getter;
 import org.geoserver.catalog.StyleInfo;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import com.google.common.base.Function;
 
 @RestController
 @RequestMapping(StyleController.BASE_URI)
@@ -16,4 +17,10 @@ public class StyleController extends AbstractCatalogInfoController<StyleInfo> {
     public static final String BASE_URI = BASE_API_URI + "/styles";
 
     private final @Getter Class<StyleInfo> infoType = StyleInfo.class;
+
+    @Override
+    protected Function<StyleInfo, Object> getMapperFunction() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

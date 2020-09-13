@@ -12,18 +12,17 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @FeignClient(
-        name = "catalog-service",
-        contextId = "layerGroupClient",
-        path = "/api/v1/catalog/layergroups"
-    )
+    name = "catalog-service",
+    contextId = "layerGroupClient",
+    path = "/api/v1/catalog/layergroups"
+)
 public interface LayerGroupClient extends CatalogApiClient<LayerGroupInfo> {
 
     @GetMapping(path = "/query/noworkspace")
     List<LayerGroupInfo> findAllByWoskspaceIsNull();
 
     @GetMapping(path = "/query/workspace")
-    List<LayerGroupInfo> findAllByWoskspaceId(
-            @RequestParam("workspaceId") String workspaceId);
+    List<LayerGroupInfo> findAllByWoskspaceId(@RequestParam("workspaceId") String workspaceId);
 
     @GetMapping(path = "/find/name/{name}")
     LayerGroupInfo findByNameAndWorkspaceId(

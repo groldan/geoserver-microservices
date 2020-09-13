@@ -5,14 +5,14 @@
 package org.geoserver.cloud.catalog.client.repository;
 
 import java.util.List;
+import lombok.Getter;
+import lombok.NonNull;
 import org.geoserver.catalog.DataStoreInfo;
 import org.geoserver.catalog.StoreInfo;
 import org.geoserver.catalog.WorkspaceInfo;
 import org.geoserver.catalog.plugin.CatalogInfoRepository.StoreRepository;
 import org.geoserver.cloud.catalog.client.feign.StoreClient;
 import org.springframework.lang.Nullable;
-import lombok.Getter;
-import lombok.NonNull;
 
 public class CloudStoreRepository extends CatalogServiceClientRepository<StoreInfo, StoreClient>
         implements StoreRepository {
@@ -23,8 +23,8 @@ public class CloudStoreRepository extends CatalogServiceClientRepository<StoreIn
         super(client);
     }
 
-    public @Override void setDefaultDataStore(@NonNull WorkspaceInfo workspace,
-            @NonNull DataStoreInfo dataStore) {
+    public @Override void setDefaultDataStore(
+            @NonNull WorkspaceInfo workspace, @NonNull DataStoreInfo dataStore) {
         client().setDefaultDataStoreByWorkspaceId(workspace.getId(), dataStore.getId());
     }
 
@@ -47,9 +47,9 @@ public class CloudStoreRepository extends CatalogServiceClientRepository<StoreIn
         return (List<T>) client().findAllByType(typeEnum(clazz));
     }
 
-    public @Override <T extends StoreInfo> T findByNameAndWorkspace(@NonNull String name,
-            @NonNull WorkspaceInfo workspace, @NonNull Class<T> clazz) {
-        return clazz
-                .cast(client().findByNameAndWorkspaceId(name, workspace.getId(), typeEnum(clazz)));
+    public @Override <T extends StoreInfo> T findByNameAndWorkspace(
+            @NonNull String name, @NonNull WorkspaceInfo workspace, @NonNull Class<T> clazz) {
+        return clazz.cast(
+                client().findByNameAndWorkspaceId(name, workspace.getId(), typeEnum(clazz)));
     }
 }

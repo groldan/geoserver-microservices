@@ -8,6 +8,7 @@ import lombok.Getter;
 import org.geoserver.catalog.LayerGroupInfo;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import com.google.common.base.Function;
 
 @RestController
 @RequestMapping(LayerGroupController.BASE_URI)
@@ -16,4 +17,10 @@ public class LayerGroupController extends AbstractCatalogInfoController<LayerGro
     public static final String BASE_URI = BASE_API_URI + "/layergroups";
 
     private final @Getter Class<LayerGroupInfo> infoType = LayerGroupInfo.class;
+
+    @Override
+    protected Function<LayerGroupInfo, Object> getMapperFunction() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

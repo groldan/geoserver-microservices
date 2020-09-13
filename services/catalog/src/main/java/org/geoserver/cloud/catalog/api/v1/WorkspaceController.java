@@ -4,19 +4,14 @@
  */
 package org.geoserver.cloud.catalog.api.v1;
 
-import java.util.List;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
 import org.geoserver.catalog.WorkspaceInfo;
-import org.geoserver.catalog.impl.ClassMappings;
 import org.geoserver.catalog.impl.WorkspaceInfoImpl;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import com.google.common.base.Function;
 import lombok.Getter;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @RestController
@@ -27,6 +22,7 @@ public class WorkspaceController extends AbstractCatalogInfoController<Workspace
 
     private final @Getter Class<WorkspaceInfo> infoType = WorkspaceInfo.class;
 
+
     @Nullable
     @GetMapping(path = "/default", produces = "application/xml")
     public Mono<WorkspaceInfo> getDefault() {
@@ -36,22 +32,18 @@ public class WorkspaceController extends AbstractCatalogInfoController<Workspace
         return Mono.just(fake);
     }
 
-    @GetMapping(path = "/query/all")
-    public Flux<WorkspaceInfo> findAll(
-            @RequestParam(name = "subtype", required = false) ClassMappings type) {
-
-        Mono<Stream<WorkspaceInfo>> mono = Mono.fromCallable(catalog::getWorkspaces).map(List::stream).publishOn(catalogScheduler);
-
-        return Flux.fromStream(() -> {
-            System.err.println("getting workspaces in " + Thread.currentThread().getName());
-            return catalog.getWorkspaces().stream();}).publishOn(catalogScheduler);
+    @Override
+    protected Function<WorkspaceInfo, Object> getMapperFunction() {
+        return mapper::map;
     }
 
-//    @GetMapping(path = "/query/all", produces = "application/xml")
-//    public Flux<Integer> findAll(
-//            @RequestParam(name = "subtype", required = false) ClassMappings type) {
-//
-//        
-//        return Flux.fromStream(() -> IntStream.range(0, 100).mapToObj(Integer::valueOf)).publishOn(catalogScheduler);
-//    }
+    // @GetMapping(path = "/query/all")
+    // public Flux<WorkspaceInfo> findAll(
+    // @RequestParam(name = "subtype", required = false) ClassMappings type) {
+    //
+    // return Flux.fromStream(() -> {
+    // System.err.println("getting workspaces in " + Thread.currentThread().getName());
+    // return catalog.getWorkspaces().stream();}).publishOn(catalogScheduler);
+    // }
+
 }

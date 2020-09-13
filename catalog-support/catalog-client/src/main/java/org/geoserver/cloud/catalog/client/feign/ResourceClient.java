@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @FeignClient(
-        name = "catalog-service",
-        contextId = "resourceClient",
-        path = "/api/v1/catalog/resources"
-    )
+    name = "catalog-service",
+    contextId = "resourceClient",
+    path = "/api/v1/catalog/resources"
+)
 public interface ResourceClient extends CatalogApiClient<ResourceInfo> {
 
     @GetMapping(path = "/find/name/{name}", consumes = XML)

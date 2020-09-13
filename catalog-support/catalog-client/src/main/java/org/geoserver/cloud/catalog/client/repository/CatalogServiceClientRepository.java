@@ -5,6 +5,7 @@
 package org.geoserver.cloud.catalog.client.repository;
 
 import java.util.List;
+import lombok.NonNull;
 import org.geoserver.catalog.Catalog;
 import org.geoserver.catalog.CatalogInfo;
 import org.geoserver.catalog.Info;
@@ -13,9 +14,9 @@ import org.geoserver.catalog.plugin.CatalogInfoRepository;
 import org.geoserver.cloud.catalog.client.feign.CatalogApiClient;
 import org.opengis.filter.Filter;
 import org.springframework.lang.Nullable;
-import lombok.NonNull;
 
-public abstract class CatalogServiceClientRepository<CI extends CatalogInfo, C extends CatalogApiClient<CI>>
+public abstract class CatalogServiceClientRepository<
+                CI extends CatalogInfo, C extends CatalogApiClient<CI>>
         implements CatalogInfoRepository<CI> {
 
     private Catalog catalog;
@@ -77,13 +78,11 @@ public abstract class CatalogServiceClientRepository<CI extends CatalogInfo, C e
     }
 
     protected @Nullable ClassMappings typeEnum(@Nullable Class<? extends Info> infoType) {
-        if (infoType == null)
-            return null;
+        if (infoType == null) return null;
         ClassMappings enumVal = ClassMappings.fromInterface(infoType);
         if (enumVal == null) {
             enumVal = ClassMappings.fromImpl(infoType);
         }
         return enumVal;
     }
-
 }

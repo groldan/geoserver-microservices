@@ -4,13 +4,12 @@
  */
 package org.geoserver.cloud.catalog.service;
 
-import com.google.common.base.Objects;
+import java.util.Spliterator;
+import java.util.Spliterators;
 import java.util.concurrent.Callable;
 import java.util.function.BiConsumer;
-import lombok.AccessLevel;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 import org.geoserver.catalog.Catalog;
 import org.geoserver.catalog.CatalogInfo;
 import org.geoserver.catalog.LayerGroupInfo;
@@ -21,12 +20,20 @@ import org.geoserver.catalog.StoreInfo;
 import org.geoserver.catalog.StyleInfo;
 import org.geoserver.catalog.WorkspaceInfo;
 import org.geoserver.catalog.impl.ClassMappings;
+import org.geoserver.catalog.util.CloseableIterator;
 import org.geoserver.ows.util.OwsUtils;
 import org.opengis.feature.type.Name;
+import org.opengis.filter.Filter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import com.google.common.base.Objects;
+import lombok.AccessLevel;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Scheduler;
 
@@ -66,19 +73,33 @@ public class ReactiveCatalogService {
         return async(() -> workerFor(type).getByName(name, type));
     }
 
+    public <T extends CatalogInfo> Flux<T> findAll(@NonNull Class<T> infoType) {
+        final CloseableIterator<T> list = catalog.list(infoType, Filter.INCLUDE);
+        final Stream<T> stream = StreamSupport
+                .stream(Spliterators.spliteratorUnknownSize(list, Spliterator.NONNULL), false);
+        return Flux.fromStream(() -> stream).publishOn(scheduler).doOnComplete(list::close);
+    }
+
     private <T> Mono<T> async(Callable<T> callable) {
         return Mono.fromCallable(callable).publishOn(scheduler);
     }
 
     @SuppressWarnings("unchecked")
     private <T extends CatalogInfo> Worker<T> workerFor(@NonNull Class<T> type) {
-        if (WorkspaceInfo.class.isAssignableFrom(type)) return (Worker<T>) workspaceWorker;
-        if (NamespaceInfo.class.isAssignableFrom(type)) return (Worker<T>) namespaceWorker;
-        if (StoreInfo.class.isAssignableFrom(type)) return (Worker<T>) storeWorker;
-        if (ResourceInfo.class.isAssignableFrom(type)) return (Worker<T>) resourceWorker;
-        if (LayerInfo.class.isAssignableFrom(type)) return (Worker<T>) layerWorker;
-        if (LayerGroupInfo.class.isAssignableFrom(type)) return (Worker<T>) layerGroupWorker;
-        if (StyleInfo.class.isAssignableFrom(type)) return (Worker<T>) styleWorker;
+        if (WorkspaceInfo.class.isAssignableFrom(type))
+            return (Worker<T>) workspaceWorker;
+        if (NamespaceInfo.class.isAssignableFrom(type))
+            return (Worker<T>) namespaceWorker;
+        if (StoreInfo.class.isAssignableFrom(type))
+            return (Worker<T>) storeWorker;
+        if (ResourceInfo.class.isAssignableFrom(type))
+            return (Worker<T>) resourceWorker;
+        if (LayerInfo.class.isAssignableFrom(type))
+            return (Worker<T>) layerWorker;
+        if (LayerGroupInfo.class.isAssignableFrom(type))
+            return (Worker<T>) layerGroupWorker;
+        if (StyleInfo.class.isAssignableFrom(type))
+            return (Worker<T>) styleWorker;
 
         throw new IllegalArgumentException(
                 "Unknown or unsupported CatalogInfo subtype: " + type.getName());
@@ -114,10 +135,9 @@ public class ReactiveCatalogService {
                 throw e;
             }
             if (null != providedId && !Objects.equal(providedId, info.getId())) {
-                String msg =
-                        String.format(
-                                "Backend catalog implementation did not respect the provided object id. Expected: %s, assigned: %s",
-                                providedId, info.getId());
+                String msg = String.format(
+                        "Backend catalog implementation did not respect the provided object id. Expected: %s, assigned: %s",
+                        providedId, info.getId());
                 throw new IllegalStateException(msg);
             }
             // kind of a race condition here, if someone changed this very same object after it was
@@ -136,12 +156,8 @@ public class ReactiveCatalogService {
                 real = patchCatalogInfo(info, real, type);
                 updater.accept(catalog, real);
             } catch (RuntimeException e) {
-                log.error(
-                        "Error updating {}:{}. {}",
-                        type.getSimpleName(),
-                        info.getId(),
-                        e.getMessage(),
-                        e);
+                log.error("Error updating {}:{}. {}", type.getSimpleName(), info.getId(),
+                        e.getMessage(), e);
                 throw e;
             }
             return real;
@@ -166,13 +182,13 @@ public class ReactiveCatalogService {
     private Worker<WorkspaceInfo> workspaceWorker =
             new AbstractWorker<WorkspaceInfo>(Catalog::add, Catalog::save, Catalog::remove) {
 
-                public @Override WorkspaceInfo getById(
-                        String id, Class<? extends WorkspaceInfo> type) {
+                public @Override WorkspaceInfo getById(String id,
+                        Class<? extends WorkspaceInfo> type) {
                     return catalog.getWorkspace(id);
                 }
 
-                public @Override WorkspaceInfo getByName(
-                        Name name, Class<? extends WorkspaceInfo> type) {
+                public @Override WorkspaceInfo getByName(Name name,
+                        Class<? extends WorkspaceInfo> type) {
                     return catalog.getWorkspaceByName(name.getLocalPart());
                 }
             };
@@ -272,4 +288,5 @@ public class ReactiveCatalogService {
                     return catalog.getStyleByName(workspaceName, localName);
                 }
             };
+
 }

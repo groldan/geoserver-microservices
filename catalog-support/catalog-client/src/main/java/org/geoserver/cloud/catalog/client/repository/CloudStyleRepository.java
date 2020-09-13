@@ -5,12 +5,12 @@
 package org.geoserver.cloud.catalog.client.repository;
 
 import java.util.List;
+import lombok.Getter;
+import lombok.NonNull;
 import org.geoserver.catalog.StyleInfo;
 import org.geoserver.catalog.WorkspaceInfo;
 import org.geoserver.catalog.plugin.CatalogInfoRepository.StyleRepository;
 import org.geoserver.cloud.catalog.client.feign.StyleClient;
-import lombok.Getter;
-import lombok.NonNull;
 
 public class CloudStyleRepository extends CatalogServiceClientRepository<StyleInfo, StyleClient>
         implements StyleRepository {

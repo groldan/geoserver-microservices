@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @FeignClient(
-        name = "catalog-service",
-        contextId = "namespaceClient",
-        path = "/api/v1/catalog/namespaces"
-    )
+    name = "catalog-service",
+    contextId = "namespaceClient",
+    path = "/api/v1/catalog/namespaces"
+)
 public interface NamespaceClient extends CatalogApiClient<NamespaceInfo> {
 
     @PostMapping(path = "/default", produces = XML)

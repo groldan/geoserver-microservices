@@ -8,6 +8,7 @@ import lombok.Getter;
 import org.geoserver.catalog.NamespaceInfo;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import com.google.common.base.Function;
 
 @RestController
 @RequestMapping(NamespaceController.BASE_URI)
@@ -16,4 +17,9 @@ public class NamespaceController extends AbstractCatalogInfoController<Namespace
     public static final String BASE_URI = BASE_API_URI + "/namespaces";
 
     private final @Getter Class<NamespaceInfo> infoType = NamespaceInfo.class;
+
+    @Override
+    protected Function<NamespaceInfo, Object> getMapperFunction() {
+        return mapper::map;
+    }
 }

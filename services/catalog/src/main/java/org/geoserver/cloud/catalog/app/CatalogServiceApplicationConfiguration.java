@@ -4,12 +4,12 @@
  */
 package org.geoserver.cloud.catalog.app;
 
-import lombok.extern.slf4j.Slf4j;
 import org.geoserver.catalog.Catalog;
 import org.geoserver.cloud.catalog.api.v1.WorkspaceController;
 import org.geoserver.cloud.catalog.app.CatalogServiceApplicationProperties.SchedulerConfig;
 import org.geoserver.cloud.catalog.http.codec.CatalogInfoXmlDecoder;
 import org.geoserver.cloud.catalog.http.codec.CatalogInfoXmlEncoder;
+import org.geoserver.cloud.catalog.modelmapper.SpringCatalogInfoMapperConfig;
 import org.geoserver.cloud.catalog.service.ReactiveCatalogService;
 import org.geoserver.config.util.XStreamPersisterFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +21,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.codec.ServerCodecConfigurer;
 import org.springframework.web.reactive.config.WebFluxConfigurer;
+import lombok.extern.slf4j.Slf4j;
 import reactor.core.scheduler.Scheduler;
 import reactor.core.scheduler.Schedulers;
 
@@ -30,7 +31,8 @@ import reactor.core.scheduler.Schedulers;
     basePackageClasses = {
         ReactiveCatalogService.class,
         WorkspaceController.class,
-        CatalogInfoXmlEncoder.class
+        CatalogInfoXmlEncoder.class,
+        SpringCatalogInfoMapperConfig.class,
     }
 )
 @Slf4j

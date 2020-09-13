@@ -11,11 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@FeignClient(
-        name = "catalog-service",
-        contextId = "styleClient",
-        path = "/api/v1/catalog/styles"
-    )
+@FeignClient(name = "catalog-service", contextId = "styleClient", path = "/api/v1/catalog/styles")
 public interface StyleClient extends CatalogApiClient<StyleInfo> {
 
     @GetMapping(path = "/query/noworkspace", consumes = XML)

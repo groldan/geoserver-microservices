@@ -13,8 +13,10 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
+
 import java.util.Collections;
 import java.util.List;
+import lombok.NonNull;
 import org.geoserver.catalog.Catalog;
 import org.geoserver.catalog.CatalogInfo;
 import org.geoserver.catalog.DataStoreInfo;
@@ -59,7 +61,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
-import lombok.NonNull;
 
 @SpringBootTest(classes = CatalogRepositoriesConfiguration.class)
 @RunWith(SpringRunner.class)
@@ -102,8 +103,8 @@ public class CatalogRepositoriesConfigurationTest {
         verify(workspaceClient, times(1)).setDefault(same(testData.workspaceA));
 
         verifyNoMoreInteractions(workspaceClient);
-        assertThrows(NullPointerException.class,
-                () -> workspaceRepository.setDefaultWorkspace(null));
+        assertThrows(
+                NullPointerException.class, () -> workspaceRepository.setDefaultWorkspace(null));
     }
 
     public @Test void namespaceRepository_CRUD() {
@@ -120,8 +121,8 @@ public class CatalogRepositoriesConfigurationTest {
         verify(namespaceClient, times(1)).setDefault(same(testData.namespaceA));
 
         verifyNoMoreInteractions(namespaceClient);
-        assertThrows(NullPointerException.class,
-                () -> namespaceRepository.setDefaultNamespace(null));
+        assertThrows(
+                NullPointerException.class, () -> namespaceRepository.setDefaultNamespace(null));
     }
 
     public @Test void storeRepository_CRUD() {
@@ -151,11 +152,14 @@ public class CatalogRepositoriesConfigurationTest {
 
     public @Test void storeRepository_SetDefaultDataStore() {
         storeRepository.setDefaultDataStore(testData.workspaceC, testData.dataStoreA);
-        verify(storeClient, times(1)).setDefaultDataStoreByWorkspaceId(eq(testData.workspaceC.getName()),
-                eq(testData.dataStoreA.getId()));
-        assertThrows(NullPointerException.class,
+        verify(storeClient, times(1))
+                .setDefaultDataStoreByWorkspaceId(
+                        eq(testData.workspaceC.getName()), eq(testData.dataStoreA.getId()));
+        assertThrows(
+                NullPointerException.class,
                 () -> storeRepository.setDefaultDataStore(null, testData.dataStoreA));
-        assertThrows(NullPointerException.class,
+        assertThrows(
+                NullPointerException.class,
                 () -> storeRepository.setDefaultDataStore(testData.workspaceC, null));
         verifyNoMoreInteractions(storeClient);
     }
@@ -195,16 +199,16 @@ public class CatalogRepositoriesConfigurationTest {
         assertWiring(mapRepository, mapClient, MapInfo.class);
     }
 
-    private <T extends CatalogInfo> void assertWiring(CatalogInfoRepository<T> repository,
-            CatalogApiClient<T> client, Class<T> infoType) {
+    private <T extends CatalogInfo> void assertWiring(
+            CatalogInfoRepository<T> repository, CatalogApiClient<T> client, Class<T> infoType) {
 
         assertThat(repository, instanceOf(CatalogServiceClientRepository.class));
         assertEquals(infoType, ((CatalogServiceClientRepository<?, ?>) repository).getInfoType());
         assertSame(client, ((CatalogServiceClientRepository<?, ?>) repository).client());
     }
 
-    private <T extends CatalogInfo> void crudTest(CatalogInfoRepository<T> repo,
-            CatalogApiClient<T> mockClient, T info) {
+    private <T extends CatalogInfo> void crudTest(
+            CatalogInfoRepository<T> repo, CatalogApiClient<T> mockClient, T info) {
 
         assertCreate(repo, mockClient, info);
 
@@ -220,26 +224,26 @@ public class CatalogRepositoriesConfigurationTest {
         clearInvocations(mockClient);
     }
 
-    private <T extends CatalogInfo> void assertDelete(CatalogInfoRepository<T> repo,
-            CatalogApiClient<T> mockClient, T info) {
+    private <T extends CatalogInfo> void assertDelete(
+            CatalogInfoRepository<T> repo, CatalogApiClient<T> mockClient, T info) {
         repo.remove(info);
         verify(mockClient, times(1)).delete(same(info));
     }
 
-    private <T extends CatalogInfo> void assertUpdate(CatalogInfoRepository<T> repo,
-            CatalogApiClient<T> mockClient, T info) {
+    private <T extends CatalogInfo> void assertUpdate(
+            CatalogInfoRepository<T> repo, CatalogApiClient<T> mockClient, T info) {
         repo.update(info);
         verify(mockClient, times(1)).update(same(info));
     }
 
-    private <T extends CatalogInfo> void assertCreate(CatalogInfoRepository<T> repo,
-            CatalogApiClient<T> mockClient, T info) {
+    private <T extends CatalogInfo> void assertCreate(
+            CatalogInfoRepository<T> repo, CatalogApiClient<T> mockClient, T info) {
         repo.add(info);
         verify(mockClient, times(1)).create(same(info));
     }
 
-    private <T extends CatalogInfo> void assertFindById(CatalogInfoRepository<T> repo,
-            CatalogApiClient<T> mockClient, T info) {
+    private <T extends CatalogInfo> void assertFindById(
+            CatalogInfoRepository<T> repo, CatalogApiClient<T> mockClient, T info) {
         when(mockClient.findById(eq(info.getId()), isNull())).thenReturn(info);
         assertSame(info, repo.findById(info.getId(), null));
         verify(mockClient, times(1)).findById(eq(info.getId()), isNull());
@@ -253,8 +257,8 @@ public class CatalogRepositoriesConfigurationTest {
         verify(mockClient, times(1)).findById(eq(info.getId()), same(expectedEnumType));
     }
 
-    private <T extends CatalogInfo> void assertFindByName(CatalogInfoRepository<T> repo,
-            CatalogApiClient<T> mockClient, T info) {
+    private <T extends CatalogInfo> void assertFindByName(
+            CatalogInfoRepository<T> repo, CatalogApiClient<T> mockClient, T info) {
 
         final @NonNull String name = simpleName(info);
         final @NonNull ClassMappings subType = ClassMappings.fromImpl(info.getClass());
@@ -275,8 +279,8 @@ public class CatalogRepositoriesConfigurationTest {
     }
 
     @SuppressWarnings("unchecked")
-    private <T extends CatalogInfo> void assertFindAll(CatalogInfoRepository<T> repo,
-            CatalogApiClient<T> mockClient, T info) {
+    private <T extends CatalogInfo> void assertFindAll(
+            CatalogInfoRepository<T> repo, CatalogApiClient<T> mockClient, T info) {
 
         final @NonNull ClassMappings genericType = genericType(info);
 

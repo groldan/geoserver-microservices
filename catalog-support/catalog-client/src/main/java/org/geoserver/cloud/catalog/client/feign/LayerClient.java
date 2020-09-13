@@ -10,18 +10,12 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@FeignClient(
-        name = "catalog-service",
-        contextId = "layerClient",
-        path = "/api/v1/catalog/layers"
-    )
+@FeignClient(name = "catalog-service", contextId = "layerClient", path = "/api/v1/catalog/layers")
 public interface LayerClient extends CatalogApiClient<LayerInfo> {
 
     @GetMapping(path = "/query/styles")
-    List<LayerInfo> findAllByDefaultStyleOrStyles(
-            @RequestParam("styleId") String styleId);
+    List<LayerInfo> findAllByDefaultStyleOrStyles(@RequestParam("styleId") String styleId);
 
     @GetMapping(path = "/query/resource")
-    List<LayerInfo> findAllByResourceId(
-            @RequestParam("resourceId") String resourceId);
+    List<LayerInfo> findAllByResourceId(@RequestParam("resourceId") String resourceId);
 }
