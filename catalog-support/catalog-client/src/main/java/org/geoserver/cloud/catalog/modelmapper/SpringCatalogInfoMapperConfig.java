@@ -7,8 +7,7 @@ import org.mapstruct.ReportingPolicy;
 @MapperConfig(
     componentModel = "spring",
     unmappedTargetPolicy = ReportingPolicy.ERROR,
-    // uses = {SimpleTypeMapper.class},
     injectionStrategy = InjectionStrategy.FIELD,
-    uses = {ObjectFacotries.class}
+    uses = {ObjectFacotries.class, ValueMappers.class}
 )
 public class SpringCatalogInfoMapperConfig {}

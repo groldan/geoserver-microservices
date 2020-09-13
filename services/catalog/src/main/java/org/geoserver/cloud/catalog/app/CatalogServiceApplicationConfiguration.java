@@ -53,7 +53,7 @@ public class CatalogServiceApplicationConfiguration implements WebFluxConfigurer
      */
     public @Bean Scheduler catalogScheduler() {
         CatalogServiceApplicationProperties config = applicationConfig();
-        SchedulerConfig schedulerConfig = config.getWorkerThreads();
+        SchedulerConfig schedulerConfig = config.getIoThreads();
         int maxThreads = schedulerConfig.getMaxSize();
         int maxQueued = schedulerConfig.getMaxQueued();
         if (maxThreads <= 0) {
