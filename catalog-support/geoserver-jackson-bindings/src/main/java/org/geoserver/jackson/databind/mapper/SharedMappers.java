@@ -16,6 +16,7 @@ import java.util.Set;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.geoserver.catalog.AuthorityURLInfo;
+import org.geoserver.catalog.CatalogInfo;
 import org.geoserver.catalog.Info;
 import org.geoserver.catalog.KeywordInfo;
 import org.geoserver.catalog.LayerIdentifierInfo;
@@ -28,11 +29,13 @@ import org.geoserver.catalog.impl.ModificationProxy;
 import org.geoserver.catalog.impl.ResolvingProxy;
 import org.geoserver.catalog.plugin.Patch;
 import org.geoserver.jackson.databind.catalog.dto.CRS;
+import org.geoserver.jackson.databind.catalog.dto.CatalogInfoDto;
 import org.geoserver.jackson.databind.catalog.dto.Envelope;
 import org.geoserver.jackson.databind.catalog.dto.InfoReference;
 import org.geoserver.jackson.databind.catalog.dto.Keyword;
 import org.geoserver.jackson.databind.catalog.dto.PatchDto;
 import org.geoserver.jackson.databind.catalog.dto.VersionDto;
+import org.geoserver.jackson.databind.catalog.mapper.CatalogInfoMapper;
 import org.geoserver.jackson.databind.config.dto.NameDto;
 import org.geoserver.wfs.GMLInfo;
 import org.geotools.feature.NameImpl;
@@ -53,6 +56,9 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 @Slf4j
 public abstract class SharedMappers {
 
+    private static final CatalogInfoMapper catalogInfoMapper =
+            Mappers.getMapper(CatalogInfoMapper.class);
+
     public Version versionToString(String v) {
         return v == null ? null : new Version(v);
     }
@@ -71,20 +77,31 @@ public abstract class SharedMappers {
 
     public <T extends Info> InfoReference infoToReference(final T info) {
         if (info == null) return null;
+        if (info instanceof CatalogInfo) {
+            CatalogInfoDto dto = catalogInfoMapper.map((CatalogInfo) info);
+            return new InfoReference(dto);
+        }
         final String id = info.getId();
         ClassMappings type = resolveType(info);
         Objects.requireNonNull(id, () -> "Object has no id: " + info);
-        Objects.requireNonNull(type, "Bad info class: " + info.getClass());
+        Objects.requireNonNull(type, () -> "Bad info class: " + info.getClass());
         return new InfoReference(type, id);
     }
 
     public <T extends Info> T referenceToInfo(InfoReference ref) {
         if (ref == null) return null;
         String id = ref.getId();
-        Objects.requireNonNull(id, () -> "Object Reference has no id: " + ref);
-        Class<T> type = ref.getType().getInterface();
-        T proxy = ResolvingProxy.create(id, type);
-        return proxy;
+        ClassMappings typeMapping = ref.getType();
+        CatalogInfoDto value = ref.getValue();
+        T info;
+        if (value == null) {
+            Objects.requireNonNull(id, () -> "Object Reference has no id: " + ref);
+            Class<T> type = typeMapping.getInterface();
+            info = ResolvingProxy.create(id, type);
+        } else {
+            info = catalogInfoMapper.map(value);
+        }
+        return info;
     }
 
     public String classToCanonicalName(Class<?> value) {

@@ -4,16 +4,26 @@
  */
 package org.geoserver.jackson.databind.catalog.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 import org.geoserver.catalog.impl.ClassMappings;
 
+/** Acts as a union for a reference to an object or the object itself */
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class InfoReference {
-    private @NonNull ClassMappings type;
-    private @NonNull String id;
+    private ClassMappings type;
+    private String id;
+    private CatalogInfoDto value;
+
+    /** Reference constructor */
+    public InfoReference(ClassMappings type, String id) {
+        this.type = type;
+        this.id = id;
+    }
+
+    /** Value constructor */
+    public InfoReference(CatalogInfoDto value) {
+        this.value = value;
+    }
 }
