@@ -17,6 +17,7 @@
     <module>catalog-event-bus</module>
     <module>catalog-event-bus-amqp</module>
     <module>catalog-client</module>
+    <module>catalog-jpa</module>
   </modules>
   <dependencies>
     <dependency>
