@@ -9,6 +9,8 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import javax.persistence.ElementCollection;
+import javax.persistence.Embedded;
 import org.geoserver.catalog.LayerInfo.WMSInterpolation;
 import org.geoserver.catalog.impl.AuthorityURL;
 import org.geoserver.catalog.impl.LayerIdentifier;
@@ -43,8 +45,14 @@ public abstract @Data class Service extends ConfigInfoDto {
     private String fees;
     private String accessConstraints;
     private List<String> versions;
+
+    @ElementCollection
     private List<Keyword> keywords;
+
+    @ElementCollection
     private List<String> exceptionFormats;
+    
+    @Embedded
     private MetadataLink metadataLink;
     private String outputStrategy;
     private String schemaBaseURL;
@@ -142,5 +150,6 @@ public abstract @Data class Service extends ConfigInfoDto {
 
     /** DTO for {@link WMTSInfo} */
     @EqualsAndHashCode(callSuper = true)
-    public static @Data class WmtsService extends Service {}
+    public static @Data class WmtsService extends Service {
+    }
 }

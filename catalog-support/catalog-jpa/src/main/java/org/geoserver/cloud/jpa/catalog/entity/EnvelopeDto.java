@@ -4,9 +4,10 @@
  */
 package org.geoserver.cloud.jpa.catalog.entity;
 
+import javax.persistence.Embeddable;
 import lombok.Data;
 
-public @Data class Envelope {
-    private CRS crs;
-    private double[] coordinates;
+@Embeddable
+public @Data class EnvelopeDto {
+    private double x1, x2, y1, y2;
 }

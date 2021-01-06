@@ -4,8 +4,10 @@
  */
 package org.geoserver.cloud.jpa.catalog.entity;
 
+import javax.persistence.Embeddable;
 import lombok.Data;
 
+@Embeddable
 public @Data class AuthorityURL {
     private String name;
     private String href;

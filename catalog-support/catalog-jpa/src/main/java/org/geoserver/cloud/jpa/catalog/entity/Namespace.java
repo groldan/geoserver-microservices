@@ -4,16 +4,32 @@
  */
 package org.geoserver.cloud.jpa.catalog.entity;
 
-import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Map;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.JoinTable;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-@Data
+@Entity
+@Table(name = "namespace")
 @EqualsAndHashCode(callSuper = true)
-public class Namespace extends CatalogInfoDto {
+public @Data class Namespace extends CatalogInfoDto {
+    @Column(name = "prefix")
     private String prefix;
+
+    @Column(name = "uri")
     private String URI;
+
+    @Column(name = "isolated")
     private boolean isolated;
-    private Map<String, Serializable> metadata;
+
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "namespace_metadata")
+    private Map<String, MetadataItem> metadata = new HashMap<>();
 }

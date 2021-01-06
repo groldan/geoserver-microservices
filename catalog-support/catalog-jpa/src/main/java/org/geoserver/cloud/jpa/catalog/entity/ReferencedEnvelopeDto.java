@@ -6,9 +6,10 @@ package org.geoserver.cloud.jpa.catalog.entity;
 
 import javax.persistence.Embeddable;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Embeddable
-public @Data class LayerIdentifier {
-    private String authority;
-    private String identifier;
+@EqualsAndHashCode(callSuper = true)
+public @Data class ReferencedEnvelopeDto extends EnvelopeDto {
+    private CRS crs;
 }

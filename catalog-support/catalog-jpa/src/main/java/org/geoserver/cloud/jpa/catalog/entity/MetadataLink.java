@@ -4,8 +4,10 @@
  */
 package org.geoserver.cloud.jpa.catalog.entity;
 
+import javax.persistence.Embeddable;
 import lombok.Data;
 
+@Embeddable
 public @Data class MetadataLink {
     private String id;
     private String type;

@@ -4,9 +4,14 @@
  */
 package org.geoserver.cloud.jpa.catalog.entity;
 
+import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
 import lombok.Data;
 
+@MappedSuperclass
 @Data
 public abstract class InfoDto {
+
+    @Id
     private String id;
 }

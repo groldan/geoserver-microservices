@@ -7,8 +7,10 @@ package org.geoserver.cloud.jpa.catalog.entity;
 import javax.persistence.Embeddable;
 import lombok.Data;
 
+/**
+ * 
+ */
 @Embeddable
-public @Data class LayerIdentifier {
-    private String authority;
-    private String identifier;
+public @Data class MetadataItem {
+
 }

@@ -5,12 +5,22 @@
 package org.geoserver.cloud.jpa.catalog.entity;
 
 import java.util.Date;
+import javax.persistence.Column;
+import javax.persistence.MappedSuperclass;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-@Data
+@MappedSuperclass
 @EqualsAndHashCode(callSuper = true)
-public abstract class CatalogInfoDto extends InfoDto {
+public @Data abstract class CatalogInfoDto extends InfoDto {
+
+    @Column(name = "created_on")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date dateCreated;
+
+    @Column(name = "updated_on")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date dateModified;
 }

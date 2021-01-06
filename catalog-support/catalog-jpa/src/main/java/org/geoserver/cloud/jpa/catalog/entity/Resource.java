@@ -7,38 +7,79 @@ package org.geoserver.cloud.jpa.catalog.entity;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
+import javax.persistence.Embedded;
+import org.geoserver.catalog.ProjectionPolicy;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
 public abstract class Resource extends CatalogInfoDto {
-    public enum ProjectionPolicy {
-        FORCE_DECLARED,
-        REPROJECT_TO_DECLARED,
-        NONE
-    }
 
+    @Column(name = "name", nullable = false)
     private String name;
+
+    @Column(name = "namespace", nullable = false)
     private InfoReference namespace;
+
+    @Column(name = "", nullable = false)
     private InfoReference store;
+
+    @Column(name = "native_name", nullable = false)
     private String nativeName;
+
+    @ElementCollection
     private List<String> alias;
+
+    @Column(name = "title")
     private String title;
+
+    @Column(name = "description")
     private String description;
+
+    @Column(name = "abstract")
     private String Abstract;
+
+    @ElementCollection
     private List<Keyword> keywords;
+
+    @ElementCollection
     private List<MetadataLink> metadataLinks;
+
+    @ElementCollection
     private List<DataLink> dataLinks;
+
+    @Embedded
     private CRS nativeCRS;
+
+    @Column(name = "srs")
     private String SRS;
-    private Envelope nativeBoundingBox;
-    private Envelope latLonBoundingBox;
+
+    @Embedded
+    private EnvelopeDto nativeBoundingBox;
+
+    @Embedded
+    private EnvelopeDto latLonBoundingBox;
+
+    @Column(name = "proj_policy")
     private ProjectionPolicy projectionPolicy;
+
+    @Column(name = "enabled")
     private boolean enabled;
+
+    @Column(name = "advertised")
     private Boolean advertised;
-    private Map<String, Serializable> metadata;
+
+    @Column(name = "service_config")
     private boolean serviceConfiguration;
+
+    @ElementCollection
     private List<String> disabledServices;
+
+    @Column(name = "simple_conversion")
     private Boolean simpleConversionEnabled;
+
+    private Map<String, Serializable> metadata;
 }
