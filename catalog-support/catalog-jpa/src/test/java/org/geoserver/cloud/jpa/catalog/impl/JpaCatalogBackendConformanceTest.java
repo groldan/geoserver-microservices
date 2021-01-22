@@ -45,8 +45,6 @@ import org.springframework.test.context.junit4.SpringRunner;
  */
 @SpringBootTest(
     classes = { //
-        CatalogServiceApplication.class, //
-        CatalogClientConfiguration.class //
     },
     webEnvironment = WebEnvironment.DEFINED_PORT,
     properties = {

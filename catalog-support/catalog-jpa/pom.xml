@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.geoserver.cloud</groupId>
     <artifactId>gs-cloud-catalog-support</artifactId>
-    <version>0.2-SNAPSHOT</version>
+    <version>${revision}</version>
   </parent>
   <artifactId>gs-cloud-catalog-jpa</artifactId>
   <description>JPA storage back-end for Catalog and configuration</description>
