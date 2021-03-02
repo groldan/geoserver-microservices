@@ -14,9 +14,9 @@ geoserver:
     send-events: true
     # whether to send the object (CatalogInfo/config info) as payload with the event. Set to false, 
     # not all possible payload types are propertly tested, and full object payload is not needed.
-    send-object: false
+    send-object: ${geoserver.backend.data-directory.enabled}
     # whether to send a diff of changes as payload with the event. Set to false, not all possible payload types are propertly tested nor needed.
-    send-diff: false
+    send-diff: ${geoserver.backend.data-directory.enabled}
   backend:
     # configure catalog backends and decide which backend to use on this service.
     # All backends are disabled, enable the required one on each service. For example, the catalog microservice 
