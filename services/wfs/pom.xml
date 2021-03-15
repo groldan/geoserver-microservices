@@ -31,10 +31,6 @@
       <groupId>org.geotools</groupId>
       <artifactId>gt-shapefile</artifactId>
     </dependency>
-    <dependency>
-      <groupId>org.geoserver.community</groupId>
-      <artifactId>gs-flatgeobuf</artifactId>
-    </dependency>
   </dependencies>
   <build>
     <plugins>
