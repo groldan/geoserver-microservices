@@ -16,14 +16,14 @@
   <properties>
     <maven.compiler.source>11</maven.compiler.source>
     <maven.compiler.target>11</maven.compiler.target>
-    <spring-cloud.version>Hoxton.SR8</spring-cloud.version>
-    <spring-boot.version>2.3.3.RELEASE</spring-boot.version>
-    <feign-reactor.version>2.0.26</feign-reactor.version>
+    <spring-cloud.version>2020.0.2</spring-cloud.version>
+    <spring-boot.version>2.4.3</spring-boot.version>
+    <feign-reactor.version>2.0.30</feign-reactor.version>
     <gs.version>2.20-SNAPSHOT</gs.version>
     <gs.community.version>2.20-SNAPSHOT</gs.community.version>
     <gt.version>26-SNAPSHOT</gt.version>
     <lombok.version>1.18.12</lombok.version>
-    <mapstruct.version>1.4.0.CR1</mapstruct.version>
+    <mapstruct.version>1.4.2.Final</mapstruct.version>
     <fmt.action>format</fmt.action>
     <fmt.skip>false</fmt.skip>
     <fork.javac>true</fork.javac>
