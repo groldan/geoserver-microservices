@@ -7,6 +7,7 @@ package org.geoserver.cloud.config;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,6 +24,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @RunWith(SpringRunner.class)
+@Slf4j
 public class ConfigApplicationTest {
 
     @LocalServerPort private int port;
@@ -46,10 +48,9 @@ public class ConfigApplicationTest {
         ResponseEntity<String> response = this.restTemplate.getForEntity(uri, String.class);
         assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
         String config = response.getBody();
+        log.info("request: {}\nresponse: {}", uri, config);
         String expected =
-                "{\"name\":\"test-service\",\"profiles\":[\"default\"],"
-                        + "\"propertySources\":[{\"name\":\"classpath:/config/test-service.yml\","
-                        + "\"source\":{\"spring.application.name\":\"geoserver\"}}]}";
+                "{\"name\":\"test-service\",\"profiles\":[\"default\"],\"label\":null,\"version\":null,\"state\":null,\"propertySources\":[{\"name\":\"class path resource [config/test-service.yml\",\"source\":{\"spring.application.name\":\"geoserver\"}}]}";
         JSONAssert.assertEquals(expected, config, JSONCompareMode.LENIENT);
     }
 
@@ -58,13 +59,9 @@ public class ConfigApplicationTest {
         ResponseEntity<String> response = this.restTemplate.getForEntity(uri, String.class);
         assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
         String config = response.getBody();
-        System.err.println(config);
+        log.info("request: {}\nresponse: {}", uri, config);
         String expected =
-                "{\"name\":\"test-service\","
-                        + "\"profiles\":[\"profile1\"],"
-                        + "\"propertySources\":["
-                        + "{\"name\":\"classpath:/config/test-service-profile1.yml\",\"source\":{\"spring.application.name\":\"geoserver-profile1\"}},"
-                        + "{\"name\":\"classpath:/config/test-service.yml\",\"source\":{\"spring.application.name\":\"geoserver\"}}]}";
+                "{\"name\":\"test-service\",\"profiles\":[\"profile1\"],\"label\":null,\"version\":null,\"state\":null,\"propertySources\":[{\"name\":\"class path resource [config/test-service-profile1.yml\",\"source\":{\"spring.application.name\":\"geoserver-profile1\"}},{\"name\":\"class path resource [config/test-service.yml\",\"source\":{\"spring.application.name\":\"geoserver\"}}]}";
         JSONAssert.assertEquals(expected, config, JSONCompareMode.LENIENT);
     }
 }
