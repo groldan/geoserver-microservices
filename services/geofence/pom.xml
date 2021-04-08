@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.geoserver.cloud</groupId>
+    <artifactId>gs-cloud-services-parent</artifactId>
+    <version>1.0-SNAPSHOT</version>
+  </parent>
+  <artifactId>gs-cloud-geofence</artifactId>
+  <packaging>jar</packaging>
+  <name>geofence-service</name>
+  <properties>
+    <docker.image.name>geofence-service</docker.image.name>
+    <start-class>org.geoserver.cloud.geofence.GeofenceApplication</start-class>
+    <geofence.version>3.5-SNAPSHOT</geofence.version>
+  </properties>
+  <dependencies>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+      <exclusions>
+        <!-- exclude ribbon dependencies in favor of spring-cloud-loadbalancer -->
+        <exclusion>
+          <artifactId>spring-cloud-starter-netflix-ribbon</artifactId>
+          <groupId>org.springframework.cloud</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>ribbon-eureka</artifactId>
+          <groupId>com.netflix.ribbon</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-loadbalancer</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-config-client</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.retry</groupId>
+      <artifactId>spring-retry</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-aop</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-actuator</artifactId>
+    </dependency>
+
+
+
+    <!-- =============================================================== -->
+    <!-- GeoFence -->
+    <!-- =============================================================== -->
+    <dependency>
+      <groupId>org.geoserver.geofence</groupId>
+      <artifactId>geofence-model-internal</artifactId>
+      <version>${geofence.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.geoserver.geofence</groupId>
+      <artifactId>geofence-services-api</artifactId>
+      <version>${geofence.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.geoserver.geofence</groupId>
+      <artifactId>geofence-services-impl</artifactId>
+      <version>${geofence.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.geoserver.geofence</groupId>
+      <artifactId>geofence-login-impl</artifactId>
+      <version>${geofence.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.geoserver.geofence</groupId>
+      <artifactId>geofence-rest-impl</artifactId>
+      <version>${geofence.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.geoserver.geofence</groupId>
+      <artifactId>geofence-ldap</artifactId>
+      <version>${geofence.version}</version>
+    </dependency>
+
+    <!-- =============================================================== -->
+    <!-- APACHE COMMONS -->
+    <!-- =============================================================== -->
+<!--     <dependency> -->
+<!--       <groupId>commons-lang</groupId> -->
+<!--       <artifactId>commons-lang</artifactId> -->
+<!--     </dependency> -->
+<!--     <dependency> -->
+<!--       <groupId>commons-collections</groupId> -->
+<!--       <artifactId>commons-collections</artifactId> -->
+<!--     </dependency> -->
+
+
+    <!-- =============================================================== -->
+    <!-- Next deps are defined in core::dao, but seems not to be transitively imported -->
+    <!-- =============================================================== -->
+    <dependency>
+      <groupId>commons-codec</groupId>
+      <artifactId>commons-codec</artifactId>
+    </dependency>
+
+    <!-- =============================================================== -->
+    <!-- 4J UTILS -->
+    <!-- =============================================================== -->
+<!--     <dependency> -->
+<!--       <groupId>dom4j</groupId> -->
+<!--       <artifactId>dom4j</artifactId> -->
+<!--     </dependency> -->
+
+    <!-- =============================================================== -->
+    <!-- Logging -->
+    <!-- =============================================================== -->
+<!--     <dependency> -->
+<!--       <groupId>log4j</groupId> -->
+<!--       <artifactId>log4j</artifactId> -->
+<!--     </dependency> -->
+
+    <!-- =============================================================== -->
+    <!-- HTTP UTILS -->
+    <!-- =============================================================== -->
+<!--     <dependency> -->
+<!--       <groupId>org.codehaus.jettison</groupId> -->
+<!--       <artifactId>jettison</artifactId> -->
+<!--     </dependency> -->
+<!--     <dependency> -->
+<!--       <groupId>javax.servlet</groupId> -->
+<!--       <artifactId>servlet-api</artifactId> -->
+<!--       <scope>provided</scope> -->
+<!--     </dependency> -->
+
+    <!-- =============================================================== -->
+    <!-- CXF -->
+    <!-- =============================================================== -->
+    <dependency>
+      <groupId>javax.xml.ws</groupId>
+      <artifactId>jaxws-api</artifactId>
+    </dependency>
+    <!-- <dependency> <groupId>org.apache.cxf</groupId> <artifactId>cxf-rt-bindings-http</artifactId> </dependency> -->
+<!--     <dependency> -->
+<!--       <groupId>org.apache.cxf</groupId> -->
+<!--       <artifactId>cxf-rt-transports-http</artifactId> -->
+<!--     </dependency> -->
+<!--     <dependency> -->
+<!--       <groupId>org.apache.cxf</groupId> -->
+<!--       <artifactId>cxf-rt-transports-http-jetty</artifactId> -->
+<!--     </dependency> -->
+<!--     <dependency> -->
+<!--       <groupId>org.apache.cxf</groupId> -->
+<!--       <artifactId>cxf-rt-frontend-jaxws</artifactId> -->
+<!--     </dependency> -->
+<!--     <dependency> -->
+<!--       <groupId>org.apache.cxf</groupId> -->
+<!--       <artifactId>cxf-rt-frontend-jaxrs</artifactId> -->
+<!--     </dependency> -->
+<!--     <dependency> -->
+<!--       <groupId>org.apache.cxf</groupId> -->
+<!--       <artifactId>cxf-rt-bindings-soap</artifactId> -->
+<!--     </dependency> -->
+<!--     <dependency> -->
+<!--       <groupId>org.apache.cxf</groupId> -->
+<!--       <artifactId>cxf-rt-databinding-aegis</artifactId> -->
+<!--     </dependency> -->
+<!--     <dependency> -->
+<!--       <groupId>org.apache.cxf</groupId> -->
+<!--       <artifactId>cxf-rt-ws-security</artifactId> -->
+<!--     </dependency> -->
+
+    <!-- =============================================================== -->
+    <!-- =============================================================== -->
+    <!-- CLIENT -->
+    <!-- =============================================================== -->
+    <!-- =============================================================== -->
+
+
+    <!-- SPRING -->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-beans</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-context</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-aop</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-tx</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-orm</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-jdbc</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-web</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-webmvc</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>build-info</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+  <profiles>
+    <profile>
+      <id>docker</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>com.spotify</groupId>
+            <artifactId>dockerfile-maven-plugin</artifactId>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+</project>

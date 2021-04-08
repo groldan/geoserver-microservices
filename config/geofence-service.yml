@@ -1,0 +1,11 @@
+
+geofence-datasource-file: 
+geofence:
+  dir: /tmp/geofence
+  datasource:
+    file: /tmp/geofence/test
+
+---
+spring.profiles: local
+server.port: 9107
+    

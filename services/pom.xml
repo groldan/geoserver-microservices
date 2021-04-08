@@ -11,6 +11,7 @@
   <name>Parent pom for GeoServer microservices</name>
   <modules>
     <module>catalog</module>
+    <module>geofence</module>
     <module>wfs</module>
     <module>wms</module>
     <module>wcs</module>
