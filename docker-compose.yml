@@ -55,7 +55,7 @@ services:
     environment:
       SERVER_PORT: 8761
       EUREKA_INSTANCE_HOSTNAME: discovery
-      JAVA_OPTS: "${DISCOVERY_JAVA_OPTS}"
+      JAVA_TOOL_OPTIONS: "${DISCOVERY_JAVA_OPTS}"
     ports:
       - 8761:8761 # for development, so services can be run from localhost and find the discovery service running on docker
     networks:
