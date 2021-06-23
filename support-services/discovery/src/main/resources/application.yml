@@ -1,5 +1,6 @@
 server:
   port: 8761
+  instance-id: ${spring.application.name}:${spring.application.instance_id:${spring.cloud.client.ip-address}}:${server.port}
 spring:
   application:
     name: discovery-service
